@@ -1,0 +1,94 @@
+app:
+  name: golwarc
+  environment: development
+  port: 8080
+
+logger:
+  level: info
+  development: true
+  output_paths:
+    - stdout
+    - logs/app.log
+
+cache:
+  lru:
+    size: 1000
+  redis:
+    addr: localhost:6379
+    password: ""
+    db: 0
+    # TLS configuration - RECOMMENDED for production
+    # For development: set enabled: false or insecure_skip_verify: true
+    tls:
+      enabled: true # Enable TLS for production
+      ca_cert: "/path/to/ca.crt"
+      client_cert: "/path/to/client.crt"
+      client_key: "/path/to/client.key"
+      insecure_skip_verify: false # Set to true only for development/testing
+
+database:
+  mysql:
+    host: localhost
+    port: 3306
+    user: root
+    password: password
+    database: golwarc
+    charset: utf8mb4
+    # TLS configuration - RECOMMENDED for production
+    # For development: set enabled: false or insecure_skip_verify: true
+    tls:
+      enabled: true # Enable TLS for production
+      ca_cert: "/path/to/ca.crt"
+      client_cert: "/path/to/client.crt"
+      client_key: "/path/to/client.key"
+      insecure_skip_verify: false # Set to true only for development/testing
+
+  postgresql:
+    host: localhost
+    port: 5432
+    user: postgres
+    password: password
+    database: golwarc
+    sslmode: prefer # Options: disable, require, verify-ca, verify-full, prefer
+    timezone: UTC
+
+  clickhouse:
+    host: localhost
+    port: 9000
+    user: default
+    password: ""
+    database: golwarc
+
+  bigtable:
+    project_id: your-gcp-project
+    instance_id: your-bigtable-instance
+
+message_queue:
+  kafka:
+    brokers:
+      - localhost:9092
+    group_id: golwarc-consumer-group
+    topic: golwarc-events
+
+  rabbitmq:
+    url: amqp://guest:guest@localhost:5672/
+
+temporal:
+  host_port: localhost:7233
+  namespace: default
+
+crawler:
+  user_agent: Mozilla/5.0 (compatible; GolwarcBot/1.0)
+  max_depth: 3
+  concurrency: 5
+  request_timeout: 30
+  rate_limit_delay: 1000
+  selenium_url: http://localhost:4444/wd/hub
+  playwright_browser: chromium
+  # Rate limiting configuration
+  rate_limit:
+    enabled: true
+    delay: 2000 # milliseconds between requests
+    random_delay: 1000 # random delay up to this value (ms)
+    max_concurrent: 5 # max concurrent requests
+    requests_per_sec: 10 # max requests per second

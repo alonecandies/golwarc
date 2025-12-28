@@ -1,0 +1,58 @@
+# golangci-lint configuration
+# Run with: golangci-lint run
+
+version: "2"
+
+linters:
+  default: standard
+  enable:
+    - misspell # Catch common misspellings
+    - unconvert # Remove unnecessary type conversions
+    - unparam # Find unused function parameters
+    - gocritic # Various checks
+    - revive # Fast, extensible linter
+    - bodyclose # Checks whether HTTP response body is closed
+
+  settings:
+    govet:
+      enable-all: true
+      disable:
+        - fieldalignment # Too strict for most cases
+
+    revive:
+      rules:
+        - name: exported
+          disabled: true # Allow unexported returns
+
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - performance
+      disabled-checks:
+        - hugeParam
+
+  exclusions:
+    rules:
+      # Exclude test files from some linters
+      - path: _test\.go
+        linters:
+          - errcheck
+          - gocritic
+
+      # Exclude generated files
+      - path: \.pb\.go
+        linters:
+          - all
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
+run:
+  timeout: 5m
+  tests: true
+
+issues:
+  max-issues-per-linter: 50
+  max-same-issues: 10
